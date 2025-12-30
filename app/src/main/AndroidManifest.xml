@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FreelanceFlowAndroid">
         <activity
-            android:name=".LoginActivity"
+            android:name=".RoleChoice"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,13 +21,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".ForgetPassActivity"
             android:exported="false" />
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".RegisterClientActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterFreelancerActivity"
             android:exported="false" />
 
 

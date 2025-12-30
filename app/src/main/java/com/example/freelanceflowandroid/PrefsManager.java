@@ -49,4 +49,5 @@ public class PrefsManager {
     public void clearSession() {
         prefs.edit().clear().apply();
     }
+
 }

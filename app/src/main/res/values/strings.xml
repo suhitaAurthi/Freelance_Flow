@@ -1,5 +1,7 @@
 <resources>
-    <string name="app_name">FreelanceFlowAndroid</string>
+    <string name="app_name">FreelanceFlow</string>
+    <string name="portraitText">Portrait</string>
+    <string name="landscapeText">Landscape</string>
     <string name="label_email">E-mail:</string>
     <string name="hint_email">Enter your Email</string>
     <string name="label_password">Password:</string>
