@@ -15,23 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
-/**
- * RoleChoice activity:
- * - Lets user choose client or freelancer
- * - Persists selection via PrefsManager.saveUserRole(...)
- * - Launches appropriate registration activity when Create Account is tapped
- *
- * Important: ensure your layout (R.layout.role_activity) contains the following IDs:
- * - MaterialButtonToggleGroup @+id/toggleButton
- * - MaterialButton @+id/button1 (client)
- * - MaterialButton @+id/button2 (freelancer)
- * - ImageView @+id/imageView
- * - TextView @+id/textView11 (description)
- * - TextView @+id/textView10 (login link)
- * - Button @+id/button4 (create account)
- *
- * Also ensure RegisterClientActivity and RegisterFreelancerActivity are declared in AndroidManifest.xml.
- */
+
 public class RoleChoice extends AppCompatActivity {
 
     private static final String TAG = "RoleChoice";

@@ -10,7 +10,6 @@ import com.example.freelanceflowandroid.fragments.FreelancerDashboardFragment;
 import com.example.freelanceflowandroid.fragments.TeamDashboardFragment;
 
 public class DashboardActivity extends AppCompatActivity {
-
     public static final String EXTRA_USER_ROLE = "extra_user_role";
     public static final String ROLE_FREELANCER = "FREELANCER";
     public static final String ROLE_TEAM_ADMIN = "TEAM_ADMIN";
@@ -46,5 +45,4 @@ public class DashboardActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
-
 }

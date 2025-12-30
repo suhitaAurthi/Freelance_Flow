@@ -18,24 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-/**
- * LoginActivity
- *
- * Notes:
- * - The layout set in setContentView(...) must contain:
- *     - TextInputEditText with id @+id/etEmail
- *     - TextInputEditText with id @+id/etPassword
- *     - TextView with id @+id/textView7 (forgot password) OR update IDs here
- *     - TextView with id @+id/textView8 (register / "Don't have an account?")
- *     - MaterialButton with id @+id/button (login)
- *
- * - If your XML currently places the id on TextInputLayout instead of the inner TextInputEditText,
- *   either move the id to the TextInputEditText or change the code to fetch the edit text via:
- *     TextInputLayout til = findViewById(R.id.tilEmail); TextInputEditText et = til.getEditText();
- *
- * - If you include Google Mobile Ads (play-services-ads) make sure you add the AdMob app ID meta-data
- *   to AndroidManifest.xml (or remove the dependency while developing). See logcat error in prior messages.
- */
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
