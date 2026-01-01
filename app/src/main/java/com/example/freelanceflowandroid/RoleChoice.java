@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 public class RoleChoice extends AppCompatActivity {
 
@@ -37,9 +39,9 @@ public class RoleChoice extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.role_activity); // update if your layout filename differs
-
         try {
+            setContentView(R.layout.role_activity); // update if your layout filename differs
+
             toggleGroup = findViewById(R.id.toggleButton);
             buttonClient = findViewById(R.id.button1);
             buttonFreelancer = findViewById(R.id.button2);
@@ -52,8 +54,16 @@ public class RoleChoice extends AppCompatActivity {
             if (toggleGroup == null || buttonClient == null || buttonFreelancer == null
                     || imageView == null || descriptionText == null || loginText == null
                     || createAccountButton == null) {
-                Log.e(TAG, "One or more views are null. Check your layout IDs and setContentView.");
+                StringWriter sw = new StringWriter();
+                new NullPointerException("RoleChoice layout missing views").printStackTrace(new PrintWriter(sw));
+                try {
+                    android.content.Intent i = new android.content.Intent(this, CrashActivity.class);
+                    i.putExtra("stack", sw.toString());
+                    i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                } catch (Exception ex) { /* ignore */ }
                 Toast.makeText(this, "UI not initialized correctly. Check layout IDs (see Logcat).", Toast.LENGTH_LONG).show();
+                finish();
                 return;
             }
 
@@ -119,7 +129,15 @@ public class RoleChoice extends AppCompatActivity {
 
         } catch (Throwable t) {
             Log.e(TAG, "Startup exception in RoleChoice.onCreate", t);
-            Toast.makeText(this, "Startup error: check Logcat for details.", Toast.LENGTH_LONG).show();
+            try {
+                StringWriter sw = new StringWriter();
+                t.printStackTrace(new PrintWriter(sw));
+                android.content.Intent i = new android.content.Intent(this, CrashActivity.class);
+                i.putExtra("stack", sw.toString());
+                i.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+            } catch (Exception ex) { /* ignore */ }
+            finish();
         }
     }
 

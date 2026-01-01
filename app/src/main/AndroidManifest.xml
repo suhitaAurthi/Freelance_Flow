@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -27,7 +28,7 @@
             android:name=".ForgetPassActivity"
             android:exported="false" />
         <activity
-            android:name=".DashboardActivity"
+            android:name=".DashboardClient"
             android:exported="false" />
         <activity
             android:name=".RegisterClientActivity"
@@ -35,8 +36,20 @@
         <activity
             android:name=".RegisterFreelancerActivity"
             android:exported="false" />
+        <activity
+            android:name=".congratulationAct"
+            android:exported="false" />
 
-
+        <activity
+            android:name=".clientDetail"
+            android:exported="false" />
+        <activity
+            android:name=".freelancerDetail"
+            android:exported="false" />
+        <activity
+            android:name=".CrashActivity"
+            android:exported="true"
+            android:label="Crash" />
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.example.freelanceflowandroid;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ForgetPassActivity extends AppCompatActivity {

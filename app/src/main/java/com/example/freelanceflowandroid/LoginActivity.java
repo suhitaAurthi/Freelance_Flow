@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
             loginButton.setOnClickListener(v -> {
                 try {
                     // TODO: validate credentials, call backend, store token, etc.
-                    Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                    Intent i = new Intent(LoginActivity.this, DashboardClient.class);
                     startActivity(i);
                     finish();
                 } catch (ActivityNotFoundException ex) {

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:fillViewport="true">
+
+    <!-- UPPER PART: container -->
+    <!-- UPPER PART: container -->
+    <LinearLayout
+        android:id="@+id/container"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Client Details"
+            android:textAlignment="center"
+            android:textColor="#023C34"
+            android:fontFamily="serif"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Logo / Company photo -->
+        <TextView
+            android:id="@+id/label_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Company logo / profile photo (PNG / JPG)"
+            android:textSize="16sp"
+            android:fontFamily="serif"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_logo_preview"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:contentDescription="logo preview"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <ImageButton
+                android:id="@+id/btn_remove_logo"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end|top"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="-12dp"
+                android:visibility="gone"
+                android:contentDescription="Remove logo"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_select_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Logo/Photo"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#142081"
+            android:textColor="#ffffff"
+            android:fontFamily="serif"
+            android:textSize="16sp"
+            />
+
+        <!-- Display / Company name -->
+        <TextView
+            android:id="@+id/label_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Display name / Company name: "
+            android:layout_marginTop="16dp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textColor="@color/black"
+            android:textSize="16dp"/>
+
+        <EditText
+            android:id="@+id/et_display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="e.g., Acme Corp"
+            android:inputType="textPersonName"/>
+
+        <!-- Account type -->
+        <TextView
+            android:id="@+id/label_account_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account type: "
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            />
+
+        <Spinner
+            android:id="@+id/sp_account_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Phone (optional) with verify -->
+        <TextView
+            android:id="@+id/label_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone (optional):"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="+1 555 555 5555"
+                android:inputType="phone" />
+
+            <Button
+                android:id="@+id/btn_verify_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Verify"
+                android:layout_marginStart="8dp"
+                android:backgroundTint="@color/black"
+                android:fontFamily="serif"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_phone_verified"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#388E3C"
+            android:layout_marginTop="4dp"
+            android:textStyle="italic"/>
+
+        <!-- Location: City, Country -->
+        <TextView
+            android:id="@+id/label_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location (City, Country):"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            />
+
+        <EditText
+            android:id="@+id/et_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="City"
+            android:inputType="textCapWords"
+            android:layout_marginTop="4dp"
+            android:textSize="17dp"
+            android:fontFamily="serif"/>
+
+        <EditText
+            android:id="@+id/et_country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Country"
+            android:inputType="textCapWords"
+            android:layout_marginTop="8dp"
+            android:textSize="17dp"
+            android:fontFamily="serif"
+            />
+
+        <!-- Payment method on file -->
+        <TextView
+            android:id="@+id/label_payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment method on file:"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            />
+
+        <Switch
+            android:id="@+id/switch_payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment method added"
+            android:layout_marginTop="4dp"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            android:fontFamily="serif"
+            />
+
+        <!-- Typical project budget ranges -->
+        <TextView
+            android:id="@+id/label_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Typical project budget (min / max):"
+            android:layout_marginTop="12dp"
+            android:textStyle="bold"
+            android:fontFamily="serif"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+            <EditText
+                android:id="@+id/et_budget_min"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Min (e.g., 100)"
+                android:inputType="numberDecimal"
+                android:fontFamily="serif"
+                />
+
+            <EditText
+                android:id="@+id/et_budget_max"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Max (e.g., 2000)"
+                android:inputType="numberDecimal"
+                android:layout_marginStart="8dp"
+                android:fontFamily="serif"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_budget_sample"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginTop="8dp"
+            android:textStyle="italic"
+            android:textColor="#444"/>
+
+        <!-- Projects list (RecyclerView) -->
+        <TextView
+            android:id="@+id/label_projects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Recent projects:"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            android:textSize="16dp"
+            android:fontFamily="serif"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_no_projects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No projects posted yet."
+            android:textColor="#666"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            android:gravity="center"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_projects"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btn_add_project"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Project (sample)"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="#142081"
+            android:textColor="#ffffff"
+            android:fontFamily="serif"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+        <!-- Submit -->
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save and Continue"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#142081"
+            android:textColor="#ffffff"
+            android:fontFamily="serif"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+</ScrollView>

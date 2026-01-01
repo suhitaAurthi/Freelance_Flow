@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!-- Landscape uses the same layout as portrait by including it.
+         This prevents null findViewById() results when the activity expects views. -->
+    <include layout="@layout/register_client" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

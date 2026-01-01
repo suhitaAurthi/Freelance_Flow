@@ -106,28 +106,24 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:layout_marginBottom="327dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="serif"
         android:text="@string/forgot_password"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.531"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordLayout"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="179dp"
         android:fontFamily="serif"
         android:text="@string/action_login"
         android:textColor="#FFFFFF"
@@ -135,27 +131,24 @@
         android:textStyle="bold"
         app:cornerRadius="12dp"
         android:backgroundTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:strokeWidth="0dp" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:layout_marginBottom="112dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="serif"
         android:text="@string/no_account_register"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
