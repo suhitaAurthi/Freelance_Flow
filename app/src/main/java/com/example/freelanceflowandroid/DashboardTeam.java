@@ -1,4 +1,6 @@
 package com.example.freelanceflowandroid;
 
-public class DashboardTeam {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class DashboardTeam extends AppCompatActivity {
 }

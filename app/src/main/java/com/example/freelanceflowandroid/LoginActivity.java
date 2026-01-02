@@ -18,7 +18,18 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import android.util.Patterns;
 
+/**
+ * LoginActivity
+ *
+ * Behavior:
+ * - Immediately redirect if initial_role extra or saved role indicates client or freelancer,
+ *   unless caller passed show_login_ui=true (in which case show the login UI).
+ *   client -> DashboardClient
+ *   freelancer -> freelancerOrTeam
+ * - Otherwise show login UI.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -33,15 +44,53 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // defensive wrapper so we surface errors in a Toast instead of immediate crash during dev
+        // 1) Check Intent extra first, then PrefsManager
         try {
-            // Edge-to-edge (optional)
+            String roleFromIntent = null;
+            boolean showLoginUI = false;
+            if (getIntent() != null) {
+                if (getIntent().hasExtra("initial_role")) {
+                    roleFromIntent = getIntent().getStringExtra("initial_role");
+                }
+                // callers can request login UI to be shown by passing this flag
+                showLoginUI = getIntent().getBooleanExtra("show_login_ui", false);
+            }
+
+            // If caller requested to show the login UI, DO NOT auto-redirect.
+            if (!showLoginUI) {
+                String savedRole = roleFromIntent != null ? roleFromIntent : PrefsManager.getInstance(this).getUserRole();
+
+                if (RoleChoice.ROLE_CLIENT.equals(savedRole)) {
+                    // Redirect immediately to client dashboard
+                    try {
+                        startActivity(new Intent(this, DashboardClient.class));
+                    } catch (ActivityNotFoundException ex) {
+                        Toast.makeText(this, "Client dashboard not found.", Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
+                    return;
+                } else if (RoleChoice.ROLE_FREELANCER.equals(savedRole)) {
+                    // Redirect immediately to freelancer/team choice
+                    try {
+                        startActivity(new Intent(this, freelancerOrTeam.class));
+                    } catch (ActivityNotFoundException ex) {
+                        Toast.makeText(this, "Freelancer/team choice screen not found.", Toast.LENGTH_SHORT).show();
+                    }
+                    finish();
+                    return;
+                }
+            }
+        } catch (Throwable t) {
+            Log.w(TAG, "Failed to resolve redirect role (showing login UI)", t);
+            // continue to show login UI
+        }
+
+        // 2) No immediate redirect -> show login UI
+        try {
             WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-            // Make sure this points to your login layout (update if your layout file name differs)
-            setContentView(R.layout.activity_main);
+            setContentView(R.layout.activity_main); // your login layout
 
-            // Handle window insets for safe area (optional)
             View root = findViewById(android.R.id.content);
             if (root != null) {
                 ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
@@ -56,21 +105,18 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
 
-            // IMPORTANT: these IDs must exist in activity_main.xml and point to the inner TextInputEditText
             etEmail = findViewById(R.id.etEmail);
             etPassword = findViewById(R.id.etPassword);
             forgotPass = findViewById(R.id.textView7);
             textViewRegister = findViewById(R.id.textView8);
             loginButton = findViewById(R.id.button);
 
-            // Defensive null checks — will show log + toast and stop initialization if UI is miswired
             if (etEmail == null || etPassword == null || loginButton == null || textViewRegister == null) {
                 Log.e(TAG, "One or more login views are null. Check activity_main.xml IDs.");
                 Toast.makeText(this, "Login UI not initialized correctly. See Logcat for details.", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            // IME action on password: press Done triggers login
             etPassword.setOnEditorActionListener((v, actionId, event) -> {
                 if (actionId == EditorInfo.IME_ACTION_DONE ||
                         (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
@@ -83,11 +129,15 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             });
 
-            // Forgot password (optional)
             if (forgotPass != null) {
                 forgotPass.setOnClickListener(v -> {
                     try {
                         Intent i = new Intent(LoginActivity.this, ForgetPassActivity.class);
+                        // prefill email in forgot-pass screen if user entered one
+                        if (etEmail != null && etEmail.getText() != null) {
+                            String email = etEmail.getText().toString().trim();
+                            if (!email.isEmpty()) i.putExtra("prefill_email", email);
+                        }
                         startActivity(i);
                     } catch (ActivityNotFoundException ex) {
                         Toast.makeText(LoginActivity.this, "Forget password screen not found.", Toast.LENGTH_SHORT).show();
@@ -95,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
             }
 
-            // "Don't have an account?" -> open saved-role registration or RoleChoice
             textViewRegister.setOnClickListener(v -> {
                 String savedRole = PrefsManager.getInstance(LoginActivity.this).getUserRole();
                 try {
@@ -104,32 +153,58 @@ public class LoginActivity extends AppCompatActivity {
                     } else if (RoleChoice.ROLE_CLIENT.equals(savedRole)) {
                         startActivity(new Intent(LoginActivity.this, RegisterClientActivity.class));
                     } else {
-                        // No saved role — let user choose
                         startActivity(new Intent(LoginActivity.this, RoleChoice.class));
                     }
                 } catch (ActivityNotFoundException ex) {
+                    Log.e(TAG, "Registration activity not found", ex);
                     Toast.makeText(LoginActivity.this, "Registration activity not found. Check AndroidManifest.", Toast.LENGTH_SHORT).show();
                 }
             });
 
-            // Login button (placeholder - replace with real auth)
+            // Login button: after successful auth, route according to saved role in PrefsManager
             loginButton.setOnClickListener(v -> {
                 try {
-                    // TODO: validate credentials, call backend, store token, etc.
-                    Intent i = new Intent(LoginActivity.this, DashboardClient.class);
-                    startActivity(i);
+                    // Validate email & password before proceeding (simple client-side checks)
+                    String email = (etEmail != null && etEmail.getText() != null) ? etEmail.getText().toString().trim() : "";
+                    String password = (etPassword != null && etPassword.getText() != null) ? etPassword.getText().toString() : "";
+
+                    boolean ok = true;
+                    if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        etEmail.setError("Enter a valid email");
+                        ok = false;
+                    } else {
+                        etEmail.setError(null);
+                    }
+
+                    if (password.length() < 8) {
+                        etPassword.setError("Password must be at least 8 characters");
+                        ok = false;
+                    } else {
+                        etPassword.setError(null);
+                    }
+
+                    if (!ok) return; // don't proceed
+
+                    // TODO: replace with real authentication and save token
+                    String savedRoleNow = PrefsManager.getInstance(LoginActivity.this).getUserRole();
+                    if (RoleChoice.ROLE_CLIENT.equals(savedRoleNow)) {
+                        startActivity(new Intent(LoginActivity.this, DashboardClient.class));
+                    } else if (RoleChoice.ROLE_FREELANCER.equals(savedRoleNow)) {
+                        // after auth, freelancer chooses team or freelancer flow
+                        startActivity(new Intent(LoginActivity.this, freelancerOrTeam.class));
+                    } else {
+                        // fallback
+                        startActivity(new Intent(LoginActivity.this, RoleChoice.class));
+                    }
                     finish();
                 } catch (ActivityNotFoundException ex) {
-                    Toast.makeText(LoginActivity.this, "DashboardActivity not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Destination activity not found", Toast.LENGTH_SHORT).show();
                 }
             });
 
         } catch (Throwable t) {
-            // Log and show a toast so you can capture the stack trace and fix underlying error
             Log.e(TAG, "onCreate failed", t);
             Toast.makeText(this, "Startup error: " + t.getClass().getSimpleName() + " — check Logcat", Toast.LENGTH_LONG).show();
-            // Optionally finish() so user doesn't stay on a broken screen:
-            // finish();
         }
     }
 }

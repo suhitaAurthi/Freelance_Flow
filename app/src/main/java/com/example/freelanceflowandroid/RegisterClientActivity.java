@@ -9,8 +9,15 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -33,6 +40,10 @@ public class RegisterClientActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
 
+    // Google SignIn
+    private GoogleSignInClient googleSignInClient;
+    private ActivityResultLauncher<Intent> googleSignInLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +63,57 @@ public class RegisterClientActivity extends AppCompatActivity {
         btnCreateClient = findViewById(R.id.btnCreateClient);
         footerLoginClient = findViewById(R.id.footerLoginClient);
 
+        // Configure Google Sign-In (request email & id)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        googleSignInLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(result.getData()).getResult();
+                        if (account != null) {
+                            // save account info
+                            prefs.edit()
+                                    .putString(KEY_GOOGLE_ID, account.getId())
+                                    .putString(KEY_USER_TYPE, "client")
+                                    .putString("first_name", account.getGivenName())
+                                    .putString("last_name", account.getFamilyName())
+                                    .putString("email", account.getEmail())
+                                    .apply();
+
+                            PrefsManager.getInstance(RegisterClientActivity.this).saveUserRole("client");
+
+                            Toast.makeText(this, "Signed in with Google: " + account.getEmail(), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, congratulationAct.class));
+                            finish();
+                            return;
+                        }
+                    } catch (Exception ex) {
+                        // fallback to simulated flow below
+                    }
+                    // Fallback: simulated google id
+                    String simulatedGoogleId = "google_" + System.currentTimeMillis();
+                    prefs.edit()
+                            .putString(KEY_GOOGLE_ID, simulatedGoogleId)
+                            .putString(KEY_USER_TYPE, "client")
+                            .putString("first_name", safeGet(firstNameClient))
+                            .putString("last_name", safeGet(lastNameClient))
+                            .putString("email", safeGet(emailClient))
+                            .putString("country", getSelectedCountry())
+                            .putBoolean("receive_updates", checkUpdatesClient.isChecked())
+                            .apply();
+
+                    PrefsManager.getInstance(RegisterClientActivity.this).saveUserRole("client");
+
+                    Toast.makeText(this, "Signed in with Google (simulated).", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, congratulationAct.class));
+                    finish();
+                }
+        );
+
         // Create account button
         btnCreateClient.setOnClickListener(v -> {
             if (validateInputs()) {
@@ -69,34 +131,44 @@ public class RegisterClientActivity extends AppCompatActivity {
         // Already have account -> LoginActivity
         footerLoginClient.setOnClickListener(v -> {
             try {
-                startActivity(new Intent(this, LoginActivity.class));
+                // pass initial role so LoginActivity can immediately redirect to client dashboard
+                Intent i = new Intent(this, LoginActivity.class);
+                i.putExtra("initial_role", "client");
+                i.putExtra("show_login_ui", true);
+                startActivity(i);
             } catch (Exception ex) {
                 Toast.makeText(this, "Unable to open login screen.", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Continue with Google (simulated). Replace with real Google Sign-In integration as needed.
+        // Continue with Google
         btnGoogleClient.setOnClickListener(v -> {
-            // Simulate obtaining a Google id
-            String simulatedGoogleId = "google_" + System.currentTimeMillis();
-            prefs.edit()
-                    .putString(KEY_GOOGLE_ID, simulatedGoogleId)
-                    .putString(KEY_USER_TYPE, "client")
-                    // optionally store any filled fields
-                    .putString("first_name", safeGet(firstNameClient))
-                    .putString("last_name", safeGet(lastNameClient))
-                    .putString("email", safeGet(emailClient))
-                    .putString("country", getSelectedCountry())
-                    .putBoolean("receive_updates", checkUpdatesClient.isChecked())
-                    .apply();
-
-            Toast.makeText(this, "Signed in with Google (simulated).", Toast.LENGTH_SHORT).show();
             try {
-                startActivity(new Intent(this, congratulationAct.class));
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                googleSignInLauncher.launch(signInIntent);
             } catch (Exception ex) {
-                Toast.makeText(this, "Unable to start congratulations screen.", Toast.LENGTH_SHORT).show();
+                // if Google Play Services not available or other issue, fallback to simulated flow
+                String simulatedGoogleId = "google_" + System.currentTimeMillis();
+                prefs.edit()
+                        .putString(KEY_GOOGLE_ID, simulatedGoogleId)
+                        .putString(KEY_USER_TYPE, "client")
+                        .putString("first_name", safeGet(firstNameClient))
+                        .putString("last_name", safeGet(lastNameClient))
+                        .putString("email", safeGet(emailClient))
+                        .putString("country", getSelectedCountry())
+                        .putBoolean("receive_updates", checkUpdatesClient.isChecked())
+                        .apply();
+
+                PrefsManager.getInstance(RegisterClientActivity.this).saveUserRole("client");
+
+                Toast.makeText(this, "Signed in with Google (simulated).", Toast.LENGTH_SHORT).show();
+                try {
+                    startActivity(new Intent(this, congratulationAct.class));
+                } catch (Exception ex2) {
+                    Toast.makeText(this, "Unable to start congratulations screen.", Toast.LENGTH_SHORT).show();
+                }
+                finish();
             }
-            finish();
         });
     }
 
@@ -173,6 +245,9 @@ public class RegisterClientActivity extends AppCompatActivity {
             editor.putString(KEY_GOOGLE_ID, prefs.getString(KEY_GOOGLE_ID, ""));
         }
         editor.apply();
+
+        // Also save role centrally for the app flow
+        PrefsManager.getInstance(this).saveUserRole("client");
     }
 
     private String safeGet(TextInputEditText tie) {

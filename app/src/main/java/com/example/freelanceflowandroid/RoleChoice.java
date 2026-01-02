@@ -116,14 +116,29 @@ public class RoleChoice extends AppCompatActivity {
                 }
             });
 
-            // Login link -> open LoginActivity
+            // Login link -> route based on current selection:
+            // - If user selected FREELANCER -> open freelancerOrTeam (choice scene)
+            // - If user selected CLIENT     -> open LoginActivity (client login), but request to show login UI
             loginText.setClickable(true);
             loginText.setOnClickListener(v -> {
+                // Persist the currently selected role (defensive; applyRole already saves it)
+                PrefsManager.getInstance(RoleChoice.this).saveUserRole(selectedRole);
+
                 try {
-                    startActivity(new Intent(RoleChoice.this, LoginActivity.class));
+                    if (ROLE_FREELANCER.equals(selectedRole)) {
+                        // Go directly to the freelancer/team choice screen
+                        Intent intent = new Intent(RoleChoice.this, freelancerOrTeam.class);
+                        startActivity(intent);
+                    } else {
+                        // Client -> go to login page (ask LoginActivity to show the login UI instead of auto-redirect)
+                        Intent intent = new Intent(RoleChoice.this, LoginActivity.class);
+                        intent.putExtra("initial_role", selectedRole);
+                        intent.putExtra("show_login_ui", true);
+                        startActivity(intent);
+                    }
                 } catch (Exception ex) {
-                    Log.e(TAG, "Failed to start LoginActivity", ex);
-                    Toast.makeText(RoleChoice.this, "Login screen not found.", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Failed to start target activity from RoleChoice login link", ex);
+                    Toast.makeText(RoleChoice.this, "Unable to open screen. Check AndroidManifest.", Toast.LENGTH_SHORT).show();
                 }
             });
 

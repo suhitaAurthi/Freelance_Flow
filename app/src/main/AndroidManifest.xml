@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Allow network access for Google Sign-In and other network operations -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MyApp"
         android:allowBackup="true"
@@ -50,6 +53,23 @@
             android:name=".CrashActivity"
             android:exported="true"
             android:label="Crash" />
+        <activity
+            android:name=".freelancerOrTeam"
+            android:exported="false" />
+        <activity
+            android:name=".TeamLogin"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardFreelancer"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardTeam"
+            android:exported="false" />
+
+
     </application>
 
 </manifest>

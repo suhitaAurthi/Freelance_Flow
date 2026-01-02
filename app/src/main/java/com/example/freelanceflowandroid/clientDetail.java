@@ -210,7 +210,7 @@ public class clientDetail extends AppCompatActivity {
                 if (!isPhoneFormatValid(digitsOnly)) {
                     phoneVerified = false;
                     tvPhoneVerified.setTextColor(ContextCompat.getColor(clientDetail.this, android.R.color.holo_red_dark));
-                    tvPhoneVerified.setText("Invalid phone number (must be 11 digits or start with 88+11)");
+                    tvPhoneVerified.setText("Invalid phone number (must be 11 digits or +88 + 11 digits)");
                     Toast.makeText(clientDetail.this, "Invalid phone number. Please enter 11 digits or include country code 88.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -343,6 +343,19 @@ public class clientDetail extends AppCompatActivity {
 
         saveState();
         Toast.makeText(this, "Client details saved", Toast.LENGTH_SHORT).show();
+
+        // After saving client details, navigate to the Client Dashboard as requested
+        try {
+            Intent i = new Intent(clientDetail.this, DashboardClient.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            // ensure PrefsManager role is set to client so DashboardClient shows client fragment
+            PrefsManager.getInstance(clientDetail.this).saveUserRole("client");
+            startActivity(i);
+            finish();
+        } catch (Exception e) {
+            Log.e("clientDetail", "Failed to start DashboardClient", e);
+            // still remain on screen so user doesn't get lost
+        }
     }
 
     private void showAddProjectDialogInteractive() {
