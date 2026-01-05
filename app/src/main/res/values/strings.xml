@@ -1,12 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FreelanceFlow</string>
-    <string name="portraitText">Portrait</string>
-    <string name="landscapeText">Landscape</string>
-    <string name="label_email">E-mail:</string>
-    <string name="hint_email">Enter your Email</string>
-    <string name="label_password">Password:</string>
+    <!-- app -->
+    <string name="app_name">Freelance Flow</string>
+
+    <!-- existing / shared -->
+    <string name="client_dashboard_title">Client Dashboard</string>
+    <string name="client_dashboard_toolbar">Client dashboard toolbar</string>
+    <string name="freelancer_dashboard_title">Freelancer Dashboard</string>
+    <string name="freelancer_dashboard_toolbar">Freelancer dashboard toolbar</string>
+    <string name="team_dashboard_title">Team Dashboard</string>
+    <string name="team_dashboard_toolbar">Team dashboard toolbar</string>
+
+    <string name="welcome_back">Welcome back</string>
+
+    <!-- client -->
+    <string name="active_jobs_label">Active Jobs</string>
+    <string name="applications_label">Applications</string>
+    <string name="hired_label">Hired</string>
+    <string name="post_job_button">Post a New Job</string>
+    <string name="your_job_posts">Your Job Posts</string>
+
+    <!-- freelancer -->
+    <string name="find_jobs_button">Find Jobs</string>
+    <string name="recent_jobs">Recent Jobs</string>
+
+    <!-- team -->
+    <string name="team_overview">Team Overview</string>
+
+    <!-- login / activity_main strings -->
+    <string name="label_email">Email</string>
+    <string name="hint_email">you@example.com</string>
+    <string name="label_password">Password</string>
     <string name="hint_password">Enter your password</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="action_login">Login</string>
-    <string name="no_account_register">Don\'t have an account? Register!</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="action_login">Log in</string>
+    <string name="no_account_register">Dont have an account? Register</string>
+
+    <!-- common toasts / messages -->
+    <string name="toast_post_job_clicked">Post Job clicked</string>
+    <string name="toast_find_jobs_clicked">Find jobs clicked</string>
+
+    <!-- empty states / placeholders -->
+    <string name="no_job_posts">No job posts yet</string>
+    <string name="no_recent_jobs">No recent jobs available</string>
+    <string name="no_team_members">No team members found</string>
+
+    <!-- generic UI buttons -->
+    <string name="apply_button">Apply</string>
+    <string name="withdraw_button">Withdraw</string>
+    <string name="view_details">View Details</string>
+    <string name="edit_job">Edit</string>
+    <string name="delete_job">Delete</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- actions / results -->
+    <string name="job_posted_success">Job posted successfully</string>
+    <string name="job_post_error">Failed to post job. Please try again.</string>
+    <string name="loading">Loading…</string>
+    <string name="retry">Retry</string>
+
+    <!-- confirmation dialogs -->
+    <string name="confirm_delete_title">Delete job</string>
+    <string name="confirm_delete_message">Are you sure you want to delete this job?</string>
+
+    <!-- accessibility / content descriptions -->
+    <string name="content_desc_post_job">Post a new job</string>
+    <string name="content_desc_find_jobs">Find available jobs</string>
+
+    <!-- user role labels -->
+    <string name="role_client">Client</string>
+    <string name="role_freelancer">Freelancer</string>
+    <string name="role_team_admin">Team Admin</string>
+
+    <!-- recruitment adapter meta text -->
+    <string name="post_meta_members_tags">%1$d members \u2022 %2$s</string>
+
+    <!-- applicant title/status -->
+    <string name="applicant_title_status">%1$s (%2$s)</string>
+    <string name="applicant_status_message">Applicant: %1$s
+Status: %2$s</string>
+
+    <!-- team member count -->
+    <string name="team_member_count">Team members: %1$d</string>
+
+    <!-- notice placeholder strings -->
+    <string name="notice_placeholder_title">Team looking for developers</string>
+    <string name="notice_placeholder_desc">Short description goes here</string>
+    <string name="notice_placeholder_tags">android, kotlin</string>
+    <string name="notice_placeholder_members">Team members: 3</string>
+    <string name="default_web_client_id">YOUR_WEB_CLIENT_ID.apps.googleusercontent.com</string>
 </resources>

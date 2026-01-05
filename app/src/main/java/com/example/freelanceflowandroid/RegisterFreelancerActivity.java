@@ -9,14 +9,8 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -39,9 +33,6 @@ public class RegisterFreelancerActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
 
-    private GoogleSignInClient googleSignInClient;
-    private ActivityResultLauncher<Intent> googleSignInLauncher;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,52 +52,6 @@ public class RegisterFreelancerActivity extends AppCompatActivity {
         btnCreateFree = findViewById(R.id.btnCreateFree);
         footerLoginFree = findViewById(R.id.footerLoginFree);
 
-        // Google Sign-In setup
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            try {
-                GoogleSignInAccount account = GoogleSignIn.getSignedInAccountFromIntent(result.getData()).getResult();
-                if (account != null) {
-                    prefs.edit()
-                            .putString(KEY_GOOGLE_ID, account.getId())
-                            .putString(KEY_USER_TYPE, "freelancer")
-                            .putString("first_name", account.getGivenName())
-                            .putString("last_name", account.getFamilyName())
-                            .putString("email", account.getEmail())
-                            .apply();
-
-                    PrefsManager.getInstance(RegisterFreelancerActivity.this).saveUserRole("freelancer");
-
-                    Toast.makeText(this, "Signed in with Google: " + account.getEmail(), Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(this, congratulationAct.class));
-                    finish();
-                    return;
-                }
-            } catch (Exception ex) {
-                // fallback to simulated flow
-            }
-
-            // fallback simulated
-            String simulatedGoogleId = "google_" + System.currentTimeMillis();
-            prefs.edit()
-                    .putString(KEY_GOOGLE_ID, simulatedGoogleId)
-                    .putString(KEY_USER_TYPE, "freelancer")
-                    .putString("first_name", safeGet(firstNameFree))
-                    .putString("last_name", safeGet(lastNameFree))
-                    .putString("email", safeGet(emailFree))
-                    .putString("country", getSelectedCountry())
-                    .putBoolean("receive_updates", checkUpdatesFree.isChecked())
-                    .apply();
-
-            PrefsManager.getInstance(RegisterFreelancerActivity.this).saveUserRole("freelancer");
-            Toast.makeText(this, "Signed in with Google (simulated).", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, congratulationAct.class));
-            finish();
-        });
-
         // Create account button
         btnCreateFree.setOnClickListener(v -> {
             if (validateInputs()) {
@@ -124,41 +69,34 @@ public class RegisterFreelancerActivity extends AppCompatActivity {
         // Already have account -> LoginActivity
         footerLoginFree.setOnClickListener(v -> {
             try {
-                Intent i = new Intent(this, LoginActivity.class);
-                i.putExtra("initial_role", "freelancer");
-                i.putExtra("show_login_ui", true);
-                startActivity(i);
+                startActivity(new Intent(this, LoginActivity.class));
             } catch (Exception ex) {
                 Toast.makeText(this, "Unable to open login screen.", Toast.LENGTH_SHORT).show();
             }
         });
 
+        // Continue with Google (simulated). Replace with real Google Sign-In integration as needed.
         btnGoogleFree.setOnClickListener(v -> {
+            // Simulate obtaining a Google id
+            String simulatedGoogleId = "google_" + System.currentTimeMillis();
+            prefs.edit()
+                    .putString(KEY_GOOGLE_ID, simulatedGoogleId)
+                    .putString(KEY_USER_TYPE, "freelancer")
+                    // optionally store any filled fields
+                    .putString("first_name", safeGet(firstNameFree))
+                    .putString("last_name", safeGet(lastNameFree))
+                    .putString("email", safeGet(emailFree))
+                    .putString("country", getSelectedCountry())
+                    .putBoolean("receive_updates", checkUpdatesFree.isChecked())
+                    .apply();
+
+            Toast.makeText(this, "Signed in with Google (simulated).", Toast.LENGTH_SHORT).show();
             try {
-                Intent signInIntent = googleSignInClient.getSignInIntent();
-                googleSignInLauncher.launch(signInIntent);
+                startActivity(new Intent(this, congratulationAct.class));
             } catch (Exception ex) {
-                String simulatedGoogleId = "google_" + System.currentTimeMillis();
-                prefs.edit()
-                        .putString(KEY_GOOGLE_ID, simulatedGoogleId)
-                        .putString(KEY_USER_TYPE, "freelancer")
-                        .putString("first_name", safeGet(firstNameFree))
-                        .putString("last_name", safeGet(lastNameFree))
-                        .putString("email", safeGet(emailFree))
-                        .putString("country", getSelectedCountry())
-                        .putBoolean("receive_updates", checkUpdatesFree.isChecked())
-                        .apply();
-
-                PrefsManager.getInstance(RegisterFreelancerActivity.this).saveUserRole("freelancer");
-
-                Toast.makeText(this, "Signed in with Google (simulated).", Toast.LENGTH_SHORT).show();
-                try {
-                    startActivity(new Intent(this, congratulationAct.class));
-                } catch (Exception ex2) {
-                    Toast.makeText(this, "Unable to start congratulations screen.", Toast.LENGTH_SHORT).show();
-                }
-                finish();
+                Toast.makeText(this, "Unable to start congratulations screen.", Toast.LENGTH_SHORT).show();
             }
+            finish();
         });
     }
 

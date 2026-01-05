@@ -231,34 +231,20 @@
             android:textColor="#666666" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/countryClient"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="273dp"
-        android:background="@drawable/spinner_background_light"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:popupBackground="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilPasswordClient" />
-
     <CheckBox
         android:id="@+id/checkUpdatesClient"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="256dp"
         android:buttonTint="#283593"
         android:text="Send me emails with tips on how to find talent that fits my needs."
         android:textColor="#333333"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/countryClient" />
+        app:layout_constraintTop_toBottomOf="@+id/tilPasswordClient" />
 
     <CheckBox
         android:id="@+id/checkAgreeClient"

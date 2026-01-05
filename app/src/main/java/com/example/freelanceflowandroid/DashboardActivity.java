@@ -34,7 +34,13 @@ public class DashboardActivity extends AppCompatActivity {
         }
 
         // example: show FAB only for roles that can post
-        View fab = findViewById(R.id.fab_primary);
-        fab.setVisibility(("client".equals(role) || "team".equals(role)) ? View.VISIBLE : View.GONE);
+        // central_dashboard may not declare a FAB; resolve id at runtime to avoid compile-time error if missing.
+        int fabId = getResources().getIdentifier("fab_primary", "id", getPackageName());
+        if (fabId != 0) {
+            View fab = findViewById(fabId);
+            if (fab != null) {
+                fab.setVisibility(("client".equals(role) || "team".equals(role)) ? View.VISIBLE : View.GONE);
+            }
+        }
     }
 }

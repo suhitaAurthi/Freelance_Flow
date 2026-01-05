@@ -1,6 +1,8 @@
 package com.example.freelanceflowandroid;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -161,19 +163,42 @@ public class RoleChoice extends AppCompatActivity {
         // persist selection using your PrefsManager
         PrefsManager.getInstance(this).saveUserRole(selectedRole);
 
+        // palette: client=blue, freelancer=green, neutral=gray
+        final int clientColor = Color.parseColor("#142081");
+        final int freelancerColor = Color.parseColor("#00695C");
+        final int neutralBg = Color.parseColor("#E0E0E0");
+        final int neutralStroke = Color.parseColor("#9E9E9E");
+        final int textOnSelected = Color.WHITE;
+        final int textOnNeutral = Color.parseColor("#212121");
+
         if (ROLE_CLIENT.equals(role)) {
             // update UI for client (ensure drawable exists)
             imageView.setImageResource(R.drawable.client1);
             descriptionText.setText("Find, manage, pay talent — all in one place!");
-            // optionally update visual states for the buttons (e.g., selected color)
             buttonClient.setChecked(true);
             buttonFreelancer.setChecked(false);
+            styleButton(buttonClient, clientColor, clientColor, textOnSelected);
+            styleButton(buttonFreelancer, neutralBg, neutralStroke, textOnNeutral);
+            // align CTA color with client palette
+            createAccountButton.setBackgroundTintList(ColorStateList.valueOf(clientColor));
+            createAccountButton.setTextColor(textOnSelected);
         } else {
             imageView.setImageResource(R.drawable.free1);
             descriptionText.setText("Find projects, get hired and get paid!");
             buttonClient.setChecked(false);
             buttonFreelancer.setChecked(true);
+            styleButton(buttonFreelancer, freelancerColor, freelancerColor, textOnSelected);
+            styleButton(buttonClient, neutralBg, neutralStroke, textOnNeutral);
+            // align CTA color with freelancer palette
+            createAccountButton.setBackgroundTintList(ColorStateList.valueOf(freelancerColor));
+            createAccountButton.setTextColor(textOnSelected);
         }
         // Do NOT call toggleGroup.check(...) here — that would re-trigger the listener
+    }
+
+    private void styleButton(MaterialButton button, int bgColor, int strokeColor, int textColor) {
+        button.setBackgroundTintList(ColorStateList.valueOf(bgColor));
+        button.setStrokeColor(ColorStateList.valueOf(strokeColor));
+        button.setTextColor(textColor);
     }
 }

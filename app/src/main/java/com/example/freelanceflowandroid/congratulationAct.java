@@ -20,15 +20,19 @@ public class congratulationAct extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                String userType = prefs.getString(KEY_USER_TYPE, null);
+                // Prefer centralized PrefsManager role, fall back to legacy key
+                String userType = PrefsManager.getInstance(congratulationAct.this).getUserRole();
+                if (userType == null) {
+                    SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                    userType = prefs.getString(KEY_USER_TYPE, null);
+                }
                 Log.d(TAG, "congrats -> userType=" + userType);
 
-                if ("freelancer".equals(userType)) {
+                if (DashboardClient.ROLE_FREELANCER.equals(userType) || "freelancer".equals(userType)) {
                     Intent i = new Intent(congratulationAct.this, freelancerDetail.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
-                } else if ("client".equals(userType)) {
+                } else if (DashboardClient.ROLE_CLIENT.equals(userType) || "client".equals(userType)) {
                     Intent i = new Intent(congratulationAct.this, clientDetail.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);

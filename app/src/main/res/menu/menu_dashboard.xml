@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_client"
+        android:title="@string/role_client"
+        android:icon="@android:drawable/ic_menu_agenda" />
+    <item
+        android:id="@+id/menu_freelancer"
+        android:title="@string/role_freelancer"
+        android:icon="@android:drawable/ic_menu_search" />
+    <item
+        android:id="@+id/menu_team"
+        android:title="@string/role_team_admin"
+        android:icon="@android:drawable/ic_menu_manage" />
+</menu>

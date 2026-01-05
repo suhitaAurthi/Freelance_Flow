@@ -3,6 +3,8 @@ package com.example.freelanceflowandroid;
 import android.app.Application;
 import android.util.Log;
 
+import com.google.firebase.FirebaseApp;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -14,6 +16,13 @@ public class MyApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Initialize Firebase
+        try {
+            FirebaseApp.initializeApp(this);
+        } catch (Exception e) {
+            Log.w(TAG, "FirebaseApp.initializeApp failed", e);
+        }
 
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             try {

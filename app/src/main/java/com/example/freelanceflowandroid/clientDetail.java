@@ -239,6 +239,8 @@ public class clientDetail extends AppCompatActivity {
 
             loadSavedState();
 
+            // Make the submit button clearly say "Save and continue" so user knows it will navigate
+            btnSubmit.setText("Save and continue");
             btnSubmit.setOnClickListener(view -> attemptSave());
         } catch (Throwable t) {
             Log.e("clientDetail", "onCreate failed", t);
@@ -347,9 +349,11 @@ public class clientDetail extends AppCompatActivity {
         // After saving client details, navigate to the Client Dashboard as requested
         try {
             Intent i = new Intent(clientDetail.this, DashboardClient.class);
+            // pass the role explicitly so DashboardClient can use it if needed
+            i.putExtra(DashboardClient.EXTRA_USER_ROLE, DashboardClient.ROLE_CLIENT);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             // ensure PrefsManager role is set to client so DashboardClient shows client fragment
-            PrefsManager.getInstance(clientDetail.this).saveUserRole("client");
+            PrefsManager.getInstance(clientDetail.this).saveUserRole(DashboardClient.ROLE_CLIENT);
             startActivity(i);
             finish();
         } catch (Exception e) {
@@ -721,4 +725,3 @@ public class clientDetail extends AppCompatActivity {
         if (projectAdapter != null) projectAdapter.notifyDataSetChanged();
     }
 }
-

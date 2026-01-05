@@ -1,45 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_freelancer"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#00695C"
-        android:title="Freelancer"
-        android:titleTextColor="@android:color/white" />
+        app:title="Freelancer Dashboard"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_marginTop="?attr/actionBarSize"
+    <!-- Fragment container (the fragment owns the rest of the UI) -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:queryHint="Search team offers" />
-
-        <TextView
-            android:id="@+id/tv_empty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="No offers yet"
-            android:visibility="gone"
-            android:gravity="center"
-            android:padding="12dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_freelancer_jobs"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:paddingTop="8dp" />
-    </LinearLayout>
+        android:layout_marginTop="?attr/actionBarSize"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
